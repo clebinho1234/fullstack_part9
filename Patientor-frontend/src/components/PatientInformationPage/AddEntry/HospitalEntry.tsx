@@ -1,7 +1,7 @@
 import { Box, Button, Container, TextField, Typography } from "@mui/material";
 import { SyntheticEvent, useState } from "react";
 import { Diagnosis, Discharge, EntryWithoutId } from "../../../types";
-import { currentDate, handleInputChange, handleText } from "../../utils";
+import { currentDate, handleInputChange, handleText } from "../../../utils";
 
 interface Props {
     handleSubmit: (values: EntryWithoutId) => void;
