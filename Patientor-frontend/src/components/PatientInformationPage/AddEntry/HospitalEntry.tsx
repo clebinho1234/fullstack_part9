@@ -1,13 +1,15 @@
 import { Box, Button, Container, TextField, Typography } from "@mui/material";
 import { SyntheticEvent, useState } from "react";
 import { Diagnosis, Discharge, EntryWithoutId } from "../../../types";
+import { currentDate, handleInputChange, handleText } from "../../utils";
 
 interface Props {
     handleSubmit: (values: EntryWithoutId) => void;
     onCancel: React.Dispatch<React.SetStateAction<string>>;
+    setError: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const HospitalEntry = ({ handleSubmit, onCancel }: Props) => {
+const HospitalEntry = ({ handleSubmit, onCancel, setError }: Props) => {
     const [description, setDescription] = useState('');
     const [date, setDate] = useState('');
     const [specialist, setSpecialist] = useState('');
@@ -17,6 +19,14 @@ const HospitalEntry = ({ handleSubmit, onCancel }: Props) => {
     const addEntry = (event: SyntheticEvent) => {
         event.preventDefault();
         const diagnosisCodes: Array<Diagnosis['code']> = diagnosisCode !== '' ? diagnosisCode.replace(/\s+/g, "").split(',') : [];
+
+        for (const code of diagnosisCodes) {
+            if (handleInputChange(code)) {
+                setError(`Invalid diagnosis code: ${code}. Expected format: A12.3, B1.21, C12.21`);
+                return;
+            }
+        }
+        
         handleSubmit({
             description,
             date,
@@ -61,33 +71,48 @@ const HospitalEntry = ({ handleSubmit, onCancel }: Props) => {
                 />
                 <TextField
                     required
+                    type="date"
                     label="Date"
-                    placeholder="YYYY-MM-DD"
-                    fullWidth
                     value={date}
                     onChange={({ target }) => setDate(target.value)}
+                    InputLabelProps={{
+                        shrink: true,
+                    }}
+                    InputProps={{
+                        inputProps: {
+                        max: currentDate,
+                        },
+                    }}
                 />
                 <TextField
                     required
                     label="Specialist"
                     fullWidth
                     value={specialist}
-                    onChange={({ target }) => setSpecialist(target.value)}
+                    onChange={({ target }) => handleText(target.value, setSpecialist)}
                 />
                 <Typography variant="body1">Discharge:</Typography>
                 <TextField
                     required
+                    type="Date"
                     label="Discharge Date"
-                    placeholder="YYYY-MM-DD"
-                    fullWidth
-                    value={discharge.date}
+                    value={date}
                     onChange={({ target }) => handleDischargeDate(target.value)}
+                    InputLabelProps={{
+                        shrink: true,
+                    }}
+                    InputProps={{
+                        inputProps: {
+                        max: currentDate,
+                        },
+                    }}
                 />
                 <TextField
                     required
                     label="Criteria"
                     fullWidth
                     value={discharge.criteria}
+                    style={{ paddingBottom: "10px" }}
                     onChange={({ target }) => handleCriteria(target.value)}
                 />
                 <TextField

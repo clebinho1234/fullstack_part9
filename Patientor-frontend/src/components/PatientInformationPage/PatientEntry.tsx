@@ -11,7 +11,7 @@ interface Props {
     patient: Patient;
     handleData: (newPatient: Patient, newDiagnosis: Diagnosis) => void;
     diagnoses: Diagnosis[];
-    setError: React.Dispatch<React.SetStateAction<string | undefined>>;
+    setError: React.Dispatch<React.SetStateAction<string>>;
     error: string | undefined;
 }
 
@@ -171,7 +171,7 @@ const PatientEntry = ({ currentEntry, patient, handleData, diagnoses, setError, 
 
     const closeModal = (): void => {
         setModalOpen(false);
-        setError(undefined);
+        setError('');
     };
 
     const submitNewDiagnosis = async (values: Diagnosis) => {

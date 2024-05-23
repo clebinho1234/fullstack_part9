@@ -1,16 +1,17 @@
+import { Alert } from "@mui/material";
 
 interface NotifyProps {
-  errorMessage: string;
+    errorMessage: string;
 }
 
-const Notify = (props: NotifyProps) => {
-    if ( props.errorMessage === '' ) {
-      return null;
+const Notify = ({ errorMessage }: NotifyProps) => {
+    if ( errorMessage === '' ) {
+        return null;
     }
     return (
-      <div style={{color: 'red'}}>
-        {props.errorMessage}
-      </div>
+        <Alert severity="error" style={{ marginTop: '8px' }}>
+            {errorMessage}
+        </Alert>
     );
 };
   

@@ -7,19 +7,20 @@ import { useState } from "react";
 
 interface Props {
     handleSubmit: (values: EntryWithoutId) => void;
+    setError: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const AddEntry = ({ handleSubmit }: Props) => {
+const AddEntry = ({ handleSubmit, setError }: Props) => {
     const [selectedForm, setSelectedForm] = useState('');
 
     const renderForm = () => {
         switch (selectedForm) {
         case 'healthCheck':
-            return <HealthCheckEntry handleSubmit={handleSubmit} onCancel={setSelectedForm} />;
+            return <HealthCheckEntry handleSubmit={handleSubmit} onCancel={setSelectedForm} setError={setError} />;
         case 'occupational':
-            return <OccupationalEntry handleSubmit={handleSubmit} onCancel={setSelectedForm} />;
+            return <OccupationalEntry handleSubmit={handleSubmit} onCancel={setSelectedForm} setError={setError} />;
         case 'hospital':
-            return <HospitalEntry handleSubmit={handleSubmit} onCancel={setSelectedForm} />;
+            return <HospitalEntry handleSubmit={handleSubmit} onCancel={setSelectedForm} setError={setError} />;
         default:
             return null;
         }

@@ -3,6 +3,7 @@ import { useState, SyntheticEvent } from "react";
 import {  TextField, InputLabel, MenuItem, Select, Grid, Button, SelectChangeEvent } from '@mui/material';
 
 import { PatientFormValues, Gender } from "../../types";
+import { handleText } from "../utils";
 
 interface Props {
     onCancel: () => void;
@@ -33,12 +34,6 @@ const AddPatientForm = ({ onCancel, onSubmit }: Props) => {
             if (gender) {
                 setGender(gender);
             }
-        }
-    };
-
-    const handleText = (value: string, setChange: React.Dispatch<React.SetStateAction<string>>) => {
-        if (/^[A-Za-z]+$/.test(value) || value === '') {
-            setChange(value);
         }
     };
 

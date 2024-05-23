@@ -9,6 +9,7 @@ import PatientEntry from "./PatientEntry";
 import { Typography } from "@mui/material";
 import AddEntry from "./AddEntry";
 import axios from "axios";
+import Notify from "../Notify";
 
 interface Props {
     diagnoses : Diagnosis[]
@@ -19,7 +20,7 @@ interface Props {
 
 const PatientInformation = ({ diagnoses, setDiagnoses, patients, setPatients }: Props) => {
     const [patient, setPatient] = useState<Patient>();
-    const [error, setError] = useState<string>();
+    const [error, setError] = useState<string>('');
     
     const params = useParams();
     const id = params.id;
@@ -32,6 +33,16 @@ const PatientInformation = ({ diagnoses, setDiagnoses, patients, setPatients }: 
         };
         void fetchPatientData();
     }, [id]);
+
+    useEffect(() => {
+        if (error) {
+          const timer = setTimeout(() => {
+            setError('');
+          }, 3000); 
+    
+          return () => clearTimeout(timer);
+        }
+    }, [error]);
 
     if (!patient) {
         return <div>Loading...</div>;
@@ -70,6 +81,7 @@ const PatientInformation = ({ diagnoses, setDiagnoses, patients, setPatients }: 
 
     return (
         <div>
+            <Notify errorMessage={error} />
             <Typography variant="h4" style={{ marginBottom: "0.5em", marginTop: "0.5em" }}>
                 {patient.gender === 'female' ? (
                     <>
@@ -85,7 +97,7 @@ const PatientInformation = ({ diagnoses, setDiagnoses, patients, setPatients }: 
             </Typography>
             <Typography variant="body1">ssn: {patient.ssn}</Typography>
             <Typography variant="body1">occupation: {patient.occupation}</Typography>
-            <AddEntry handleSubmit={handleSubmit} />
+            <AddEntry handleSubmit={handleSubmit} setError={setError} />
             <Typography variant="h5" style={{ marginBottom: "0.5em", marginTop: "0.5em"}}><b>entries</b></Typography>
             {patient.entries.map(entry => (
                 <div key={entry.id} style={{ marginBottom: '1em' }}>
